@@ -1,0 +1,26 @@
+name: Sync upstream CVEProject/cvelistV5 -> meftahul1/cvelistV5_circe
+
+# triggers: schedule + manual
+on:
+  schedule:
+    - cron: '0 * * * *'   # every hour; change as needed (UTC)
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (no credentials)
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Sync from upstream (CVEProject/cvelistV5)
+        uses: repo-sync/github-sync@v2
+        with:
+          source_repo: https://github.com/CVEProject/cvelistV5.git
+          source_branch: main
+          destination_branch: main
+          github_token: ${{ secrets.REPO_SYNC_PAT }}
+          # optional: sync_tags: "true"
+          # optional: force: "true"  # uncomment to force a hard reset (be careful!)
